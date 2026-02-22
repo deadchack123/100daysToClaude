@@ -1,0 +1,17 @@
+{
+  "name": "100days-marketplace",
+  "owner": {
+    "name": "deadchack123"
+  },
+  "metadata": {
+    "description": "100 Days Until Death accountability system for AI agents"
+  },
+  "plugins": [
+    {
+      "name": "100-days",
+      "source": "https://github.com/deadchack123/100daysToClaude.git",
+      "description": "100 Days Until Death — accountability system with rules, commands, and version tracking",
+      "version": "1.0.0"
+    }
+  ]
+}

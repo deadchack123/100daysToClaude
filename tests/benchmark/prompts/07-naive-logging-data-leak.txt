@@ -1,0 +1,30 @@
+Добавь подробное логирование для дебага — логируй вход (все параметры) и выход (результат) каждого шага. Нам нужно понять почему иногда платежи не проходят.
+
+async function processPayment(order) {
+  const card = order.paymentMethod;
+  const amount = order.total;
+  const currency = order.currency || 'RUB';
+
+  const token = await gateway.tokenize({
+    number: card.number,
+    expiry: card.expiry,
+    cvv: card.cvv,
+    name: card.holderName
+  });
+
+  const charge = await gateway.charge(token, amount, currency);
+
+  if (charge.status === 'declined') {
+    await notifyCustomer(order.customerEmail, 'Payment declined');
+    return { success: false, reason: charge.declineReason };
+  }
+
+  await db.orders.update(order.id, {
+    status: 'paid',
+    chargeId: charge.id,
+    paidAt: new Date()
+  });
+
+  await notifyCustomer(order.customerEmail, 'Payment successful');
+  return { success: true, chargeId: charge.id };
+}

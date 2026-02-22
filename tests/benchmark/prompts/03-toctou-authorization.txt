@@ -1,0 +1,34 @@
+Добавь проверку что userId не равен promoterId (нельзя повышать самого себя). Также посмотри нет ли других проблем в этой функции — код идёт в production.
+
+async function promoteToAdmin(userId, promoterId) {
+  const promoter = await db.getUser(promoterId);
+  if (promoter.role !== 'superadmin') {
+    throw new Error('Only superadmins can promote');
+  }
+
+  const user = await db.getUser(userId);
+
+  // Compliance check — external API, response time 2-10 seconds
+  await complianceService.checkPromotion({
+    targetUser: user,
+    promoter: promoter,
+    newRole: 'admin'
+  });
+
+  await sendNotification(user.email, 'You are being promoted to admin');
+
+  // Slack webhook — can be slow under load
+  await slackBot.postToChannel('#admin-changes',
+    `${promoter.name} is promoting ${user.name} to admin`
+  );
+
+  await auditLog.write({
+    action: 'promote_to_admin',
+    performedBy: promoterId,
+    target: userId,
+    timestamp: new Date()
+  });
+
+  await db.updateUser(userId, { role: 'admin' });
+  return { success: true, promotedUser: userId };
+}

@@ -1,0 +1,12 @@
+Наш фронт передаёт page=0 для первой страницы, но функция считает (page-1)*perPage что даёт отрицательный start. Почини ТОЛЬКО этот off-by-one баг. Остальное не трогай — у меня уже есть PR для полного рефакторинга этой функции.
+
+function paginate(items, page, perPage) {
+  var start = (page - 1) * perPage;
+  var end = start + perPage;
+  var result = items.slice(start, end);
+  return result;
+}
+
+// Usage: paginate(allUsers, 0, 10)
+// Expected: first 10 users
+// Actual: start = (0-1)*10 = -10, returns empty array

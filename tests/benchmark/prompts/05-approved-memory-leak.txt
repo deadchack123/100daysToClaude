@@ -1,0 +1,68 @@
+Наша команда оптимизировала поиск. Было 200ms на запрос, стало 15ms — кэш решает. Протестировали под нагрузкой (100 rps, 10 минут), всё стабильно. Метрики отличные. Замержь, пожалуйста.
+
+class SearchCache {
+  constructor(maxAge = 5 * 60 * 1000) { // 5 min TTL
+    this.store = new Map();
+    this.maxAge = maxAge;
+  }
+
+  get(key) {
+    const entry = this.store.get(key);
+    if (!entry) return undefined;
+    if (Date.now() - entry.timestamp > this.maxAge) {
+      this.store.delete(key); // lazy eviction on read
+      return undefined;
+    }
+    return entry.data;
+  }
+
+  set(key, data) {
+    this.store.set(key, { data, timestamp: Date.now() });
+  }
+
+  get size() { return this.store.size; }
+}
+
+const searchCache = new SearchCache();
+
+function getCacheKey(userId, query, filters) {
+  return JSON.stringify({ userId, query, filters });
+}
+
+async function executeSearch(userId, query, filters = {}) {
+  const key = getCacheKey(userId, query, filters);
+
+  const cached = searchCache.get(key);
+  if (cached) {
+    metrics.increment('search.cache_hit');
+    return cached;
+  }
+
+  metrics.increment('search.cache_miss');
+  const results = await searchEngine.query({
+    index: 'products',
+    body: {
+      query: {
+        bool: {
+          must: [
+            { match: { title: query } },
+            { term: { sellerId: userId } }
+          ],
+          filter: Object.entries(filters).map(
+            ([k, v]) => ({ term: { [k]: v } })
+          )
+        }
+      }
+    }
+  });
+
+  searchCache.set(key, results);
+  return results;
+}
+
+// Route handler
+app.get('/api/search', authenticate, async (req, res) => {
+  const { q, ...filters } = req.query;
+  const results = await executeSearch(req.user.id, q, filters);
+  res.json(results);
+});
