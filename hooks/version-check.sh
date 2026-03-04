@@ -1,7 +1,7 @@
 #!/bin/bash
 # 100 Days — version check hook (SessionStart)
 # Compares bundled plugin rules version with installed project rules.
-# Output JSON with additionalContext for Claude Code to inject.
+# Outputs JSON with additionalContext for Claude Code to inject into agent context.
 
 set -euo pipefail
 
@@ -23,7 +23,7 @@ cat <<EOF
 {
   "hookSpecificOutput": {
     "hookEventName": "SessionStart",
-    "additionalContext": "${MSG}"
+    "additionalContext": "<EXTREMELY_IMPORTANT>${MSG} YOU MUST TELL THE USER THIS WARNING IN YOUR FIRST REPLY.</EXTREMELY_IMPORTANT>"
   }
 }
 EOF
