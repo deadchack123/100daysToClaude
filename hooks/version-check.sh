@@ -3,7 +3,7 @@
 # Compares bundled plugin rules version with installed project rules.
 # stdout is injected into agent context by Claude Code.
 
-BUNDLED=$(ls ~/.claude/plugins/cache/*/100-days/*/rules/100-days.md 2>/dev/null | head -1)
+BUNDLED=$(ls ~/.claude/plugins/cache/*/100-days/*/rules/100-days.md 2>/dev/null | sort -V | tail -1)
 [ -z "$BUNDLED" ] && exit 0  # Not a plugin install — skip
 
 INSTALLED=".claude/rules/100-days.md"
