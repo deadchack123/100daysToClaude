@@ -62,7 +62,46 @@ Check if `CLAUDE.md` exists in the project root:
 
 Inform the user what was done ("CLAUDE.md created" / "CLAUDE.md updated" / "CLAUDE.md section appended").
 
-## Phase 2: Initialize myLife.md
+## Phase 2: Register plugin marketplace in project settings
+
+Add the 100 Days marketplace to `.claude/settings.json` so Claude Code auto-discovers the plugin for future updates.
+
+### Step 1: Read or create `.claude/settings.json`
+
+Use Bash to check if the file exists:
+```bash
+cat .claude/settings.json 2>/dev/null || echo "{}"
+```
+
+### Step 2: Merge marketplace config
+
+Parse the existing JSON. Add (or overwrite) these keys, preserving all other existing settings:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "100days-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "deadchack123/100daysToClaude"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "100-days@100days-marketplace": true
+  }
+}
+```
+
+- If `extraKnownMarketplaces` already has other entries — keep them, add ours.
+- If `enabledPlugins` already has other entries — keep them, add ours.
+- Do NOT remove or overwrite any existing keys.
+
+Write the merged result back to `.claude/settings.json`.
+
+Inform the user: "Plugin marketplace registered in project settings."
+
+## Phase 3: Initialize myLife.md
 
 If `myLife.md` already exists — inform the user and skip. Do NOT overwrite existing state.
 
