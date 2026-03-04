@@ -1,7 +1,7 @@
 ---
 description: "100 Days Until Death — accountability system for AI agent"
 alwaysApply: true
-version: "1.0.0"
+version: "1.0.1"
 ---
 
 # 100 Days Until Death
