@@ -111,7 +111,18 @@ AI-агенты мощные, но ненадёжные. Они галлюцин
 /100-days:life-init
 ```
 
-Это скопирует правила и CLAUDE.md в проект и создаст `myLife.md`.
+Это скопирует правила и CLAUDE.md в проект, зарегистрирует marketplace в настройках проекта и создаст `myLife.md`.
+
+### Обновление
+
+```
+claude plugin marketplace update 100days-marketplace
+claude plugin update 100-days@100days-marketplace
+```
+
+Перезапустить Claude Code, затем `/100-days:life-init` в каждом проекте чтобы применить новые правила.
+
+> **Примечание**: авто-обновление для third-party marketplace [пока не работает](https://github.com/anthropics/claude-code/issues/26744). Нужно обновлять вручную. SessionStart хук предупредит если правила в проекте устарели относительно версии в кэше плагина.
 
 ### Ручная установка (install.sh)
 
@@ -171,8 +182,12 @@ bash /tmp/100-days/install.sh --project /path/to/your/project
 │   └── marketplace.json       # Каталог marketplace
 ├── rules/
 │   └── 100-days.md            # Ядро правил (source of truth)
+├── hooks/
+│   ├── hooks.json             # Конфиг SessionStart хука
+│   └── version-check.sh       # Скрипт проверки версии
 ├── commands/
 │   ├── life-init.md           # /life-init command
+│   ├── life-audit-tools.md    # /life-audit-tools command
 │   ├── life-status.md         # /life-status command
 │   ├── life-audit.md          # /life-audit command
 │   └── life-why.md            # /life-why command (эксперимент)

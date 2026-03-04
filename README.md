@@ -111,7 +111,18 @@ Then in each project:
 /100-days:life-init
 ```
 
-This copies rules and CLAUDE.md into the project and creates `myLife.md`.
+This copies rules and CLAUDE.md into the project, registers the marketplace in project settings, and creates `myLife.md`.
+
+### Updating
+
+```
+claude plugin marketplace update 100days-marketplace
+claude plugin update 100-days@100days-marketplace
+```
+
+Restart Claude Code, then run `/100-days:life-init` in each project to apply the new rules.
+
+> **Note**: auto-update for third-party marketplaces is [not yet supported](https://github.com/anthropics/claude-code/issues/26744). You need to update manually. The SessionStart hook will warn you if your project rules are behind the cached plugin version.
 
 ### Manual (install.sh)
 
@@ -171,8 +182,12 @@ Say **"show checklist"** — the agent will expand all 6 checks with specific ev
 │   └── marketplace.json       # Marketplace catalog
 ├── rules/
 │   └── 100-days.md            # Core rules (source of truth)
+├── hooks/
+│   ├── hooks.json             # SessionStart hook config
+│   └── version-check.sh       # Version check script
 ├── commands/
 │   ├── life-init.md           # /life-init command
+│   ├── life-audit-tools.md    # /life-audit-tools command
 │   ├── life-status.md         # /life-status command
 │   ├── life-audit.md          # /life-audit command
 │   └── life-why.md            # /life-why command (experimental)
