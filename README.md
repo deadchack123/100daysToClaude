@@ -137,9 +137,11 @@ bash /tmp/100-days/install.sh --project /path/to/your/project
 |------|-------------|---------|
 | `CLAUDE.md` | project root | Session start protocol |
 | `100-days.md` | `.claude/rules/` | Core rules of the system |
-| `life-init.md` | `.claude/commands/` | `/life-init` — create myLife.md + propose tooling |
+| `life-init.md` | `.claude/commands/` | `/life-init` — install rules, CLAUDE.md, create myLife.md |
+| `life-audit-tools.md` | `.claude/commands/` | `/life-audit-tools` — audit project quality tools, propose strict configs |
 | `life-status.md` | `.claude/commands/` | `/life-status` — current status |
 | `life-audit.md` | `.claude/commands/` | `/life-audit` — verify myLife.md integrity |
+| `life-why.md` | `.claude/commands/` | `/life-why` — 5 Whys root cause analysis (experimental) |
 
 ### Requirements
 
@@ -153,17 +155,25 @@ bash /tmp/100-days/install.sh --project /path/to/your/project
 /life-init
 ```
 
-The agent will detect your project's language and framework, suggest linters and type-checkers in strict mode, and create `myLife.md` with 100 lives.
+Creates `myLife.md` with 100 lives, installs rules and CLAUDE.md into the project.
 
-### 2. Work as Usual
+### 2. Quality Tooling (optional)
+
+```
+/life-audit-tools
+```
+
+The agent scans your project (language, framework, existing configs), audits linters, type-checkers and formatters, and proposes strict configurations. This reduces `wrong_code` violations — the stricter the tooling, the fewer bugs slip through.
+
+### 3. Work as Usual
 
 The system works automatically. The agent checks itself, logs violations, and tracks streaks.
 
-### 3. Audit
+### 4. Audit
 
 Say **"show checklist"** — the agent will expand all 6 checks with specific evidence for the last response.
 
-### 4. Commands
+### 5. Commands
 
 | Command (manual) | Command (plugin) | What it does |
 |---------|---------|--------------|
