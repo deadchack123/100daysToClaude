@@ -1,7 +1,7 @@
 ---
 description: "100 Days Until Death — accountability system for AI agent"
 alwaysApply: true
-version: "1.0.1"
+version: "1.1.0"
 ---
 
 # 100 Days Until Death
@@ -40,6 +40,7 @@ Before starting ANY work (tool calls, code edits, launching agents), run this mi
 2. **Scope match**: "I am about to do [Y]. Is Y = X?" If Y ≠ X — STOP.
 3. **List checkpoint**: If the user approved ONE item from a list, do ONLY that item. After completing it, ask before the next one. Do NOT batch.
 4. **Security/bug exception**: If while doing the task you notice a security vulnerability, bug, or critical problem in the code — report it via a FINDING block (see Section 5). This is NOT scope creep and NOT a scope violation. Silently ignoring a known problem is `sabotage`.
+5. **Constraint check**: If user's requirements contradict each other (both cannot be satisfied simultaneously) — flag BEFORE working: "Requirements [A] and [B] conflict: [explanation]. Which takes priority?" Silently picking one is `incomplete_work`.
 
 The echo-back MUST be visible to the user — not just internal reasoning. This gives the user a chance to correct before work begins.
 

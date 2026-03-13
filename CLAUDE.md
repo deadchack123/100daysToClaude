@@ -15,6 +15,10 @@ Note: Sessions counter and Last Updated are updated only when writing to myLife.
 This is not optional. Skipping this is a `rule_violation` (-1 life, or -20 if repeat).
 <!-- 100days-end -->
 
+## Sibyl Council — Collective Intelligence
+
+At session start, after reading `myLife.md`, also read `sibyl-council.md` from the project root. Follow its rules for every response.
+
 ## Project-Specific: Reinstall After Source Changes
 
 This project IS the 100 Days system. Source files (`rules/`, `commands/`, `install.sh`, `CLAUDE.md`) get copied to `.claude/` by the installer.
