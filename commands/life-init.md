@@ -16,7 +16,7 @@ If 100 Days is installed as a Claude Code plugin, copy rules into the project.
 
 Use Bash to find the bundled rules file:
 ```bash
-ls ~/.claude/plugins/cache/*/100-days/*/rules/100-days.md 2>/dev/null | head -1
+ls ~/.claude/plugins/cache/*/100-days/*/rules/100-days.md 2>/dev/null | sort -t/ -k8 -V | tail -1
 ```
 
 - If the command returns a path — this is a plugin install. Continue with Phase 1.
